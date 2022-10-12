@@ -54,7 +54,7 @@ function Repos() {
                 : null}
 
             {error !== null
-                ? <span>Could not load repositories. 😢</span>
+                ? <span data-testid="api-error-repos">Could not load repositories. 😢</span>
                 : null
             }
         </>
