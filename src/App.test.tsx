@@ -4,6 +4,7 @@ import { render, screen, waitFor, waitForElementToBeRemoved, within } from './te
 import App from './App'
 import { response as mockedGitHubResponse } from './testing/mocks/github-repo-response'
 import { server } from './testing/mocks/server'
+import { GitHubApi } from './constants'
 
 it('Should show a heading', () => {
     render(<App />)
@@ -20,14 +21,13 @@ it('Should load and render all mocked GitHub repositories', async () => {
 
     const { getAllByRole } = within(await screen.findByRole('list'))
     const repos = getAllByRole("listitem")
+
     expect(repos.length).toBe(mockedGitHubResponse.items.length)
 })
 
 it('Should show an error message when the API is failing', async () => {
     server.resetHandlers(
-        rest.get('https://api.github.com/search/repositories', (_req, res, ctx) => {
-            return res(ctx.status(400))
-        })
+        rest.get(GitHubApi.searchRepos, (_req, res, ctx) => res(ctx.status(400)))
     )
 
     render(<App />)

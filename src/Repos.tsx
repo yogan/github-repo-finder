@@ -1,7 +1,6 @@
 import fetch from 'cross-fetch'
 import { useEffect, useState } from "react"
-
-const BASE_URL = 'https://api.github.com/search/repositories'
+import { GitHubApi } from './constants'
 
 // TODO: pass current year/month
 const PARAMS = 'q=created:>2022-10-01&sort=stars&order=desc'
@@ -25,7 +24,7 @@ function Repos() {
             setLoading(true)
             setError(null)
             try {
-                const response = await fetch(`${BASE_URL}?${PARAMS}`)
+                const response = await fetch(`${GitHubApi.searchRepos}?${PARAMS}`)
                 if (!response.ok) {
                     throw new Error(`HTTP error (status ${response.status})`)
                 }
