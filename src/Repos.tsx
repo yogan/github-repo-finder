@@ -1,3 +1,4 @@
+import fetch from 'cross-fetch'
 import { useEffect, useState } from "react"
 
 const BASE_URL = 'https://api.github.com/search/repositories'
@@ -49,7 +50,7 @@ function Repos() {
             }
 
             {loading
-                ? <span>Loading…</span>
+                ? <span data-testid="loading-indicator">Loading…</span>
                 : null}
 
             {error !== null
