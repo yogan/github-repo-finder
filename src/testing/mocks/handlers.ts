@@ -1,5 +1,5 @@
 import { rest } from 'msw'
-import { GitHubApi } from '../../constants'
+import { GitHubApi } from '../../data/github'
 import { response } from './github-repo-response'
 
 export const handlers = [

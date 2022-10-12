@@ -1,13 +1,26 @@
 import { rest } from 'msw'
 import { expect, it } from 'vitest'
 import { render, screen, waitFor, waitForElementToBeRemoved, within } from './testing/utils'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import App from './App'
 import { response as mockedGitHubResponse } from './testing/mocks/github-repo-response'
 import { server } from './testing/mocks/server'
-import { GitHubApi } from './constants'
+import { GitHubApi } from './data/github'
+
+const createApp = () => {
+    const queryClient = new QueryClient({
+        defaultOptions: { queries: { retry: false } }
+    })
+
+    return (
+        <QueryClientProvider client={queryClient}>
+            <App />
+        </QueryClientProvider>
+    )
+}
 
 it('Should show a heading', () => {
-    render(<App />)
+    render(createApp())
 
     expect(screen.getByRole(
         'heading', { name: 'GitHub Repository Finder', level: 1 })
@@ -15,7 +28,7 @@ it('Should show a heading', () => {
 })
 
 it('Should load and render all mocked GitHub repositories', async () => {
-    render(<App />)
+    render(createApp())
 
     await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
 
@@ -30,7 +43,7 @@ it('Should show an error message when the API is failing', async () => {
         rest.get(GitHubApi.searchRepos, (_req, res, ctx) => res(ctx.status(400)))
     )
 
-    render(<App />)
+    render(createApp())
 
     await waitFor(() => screen.findByTestId('api-error-repos'))
 })
