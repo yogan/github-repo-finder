@@ -30,7 +30,6 @@ function Repos() {
                 }
                 const json = await response.json() as unknown as ApiResponse
                 setData(json.items)
-                // console.log(json.items)
             } catch (err) {
                 setError((err as Error).message)
                 setData([])
