@@ -1,5 +1,6 @@
 import fetch from 'cross-fetch'
 import { useQuery } from "@tanstack/react-query"
+import { YearMonthDayString } from '../dates'
 
 export const GitHubApi = {
     searchRepos: 'https://api.github.com/search/repositories'
@@ -14,12 +15,12 @@ export type Repository = {
     stargazers_count: number
 }
 
-// TODO: pass current year/month
-const PARAMS = 'q=created:>2022-10-01&sort=stars&order=desc'
+const buildUrl = (createdAfter: YearMonthDayString) =>
+    `${GitHubApi.searchRepos}?q=created:>${createdAfter}&sort=stars&order=desc`
 
-export const useGitHubRepo = () =>
-    useQuery<ApiResponse>(['repos'], () =>
-        fetch(`${GitHubApi.searchRepos}?${PARAMS}`)
+export const useGitHubRepo = (createdAfter: YearMonthDayString) =>
+    useQuery<ApiResponse>(['repos', {date: createdAfter}], () =>
+        fetch(buildUrl(createdAfter))
             .then(res => {
                 if (!res.ok) {
                     throw new Error(`HTTP error (status ${res.status})`)

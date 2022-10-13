@@ -1,7 +1,8 @@
 import { Repository, useGitHubRepo } from './data/github'
+import { oneWeekAgo } from './dates'
 
 function Repos() {
-    const repoQuery = useGitHubRepo()
+    const repoQuery = useGitHubRepo(oneWeekAgo())
 
     if (repoQuery.isLoading) {
         return <span data-testid="loading-indicator">Loading…</span>
