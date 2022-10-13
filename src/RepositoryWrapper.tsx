@@ -1,7 +1,8 @@
-import { Repository, useGitHubRepo } from './data/github'
+import { useGitHubRepo } from './data/github'
 import { oneWeekAgo } from './dates'
+import Repositories from './Repositories'
 
-function Repos() {
+function RepositoryWrapper() {
     const repoQuery = useGitHubRepo(oneWeekAgo())
 
     if (repoQuery.isLoading) {
@@ -14,12 +15,7 @@ function Repos() {
         </span>
     }
 
-    return <ul>
-        {repoQuery.data.items.map(d => <Repo repo={d} key={d.name} />)}
-    </ul>
+    return <Repositories repositories={repoQuery.data.items} />
 }
 
-const Repo = ({ repo }: { repo: Repository }) =>
-    <li>{repo.name} ({repo.stargazers_count} ⭐s)</li>
-
-export default Repos
+export default RepositoryWrapper

@@ -1,6 +1,6 @@
 import reactLogo from './assets/react.svg'
 import './App.css'
-import Repos from './Repos'
+import RepositoryWrapper from './RepositoryWrapper'
 
 function App() {
   return (
@@ -15,7 +15,7 @@ function App() {
         <h1>GitHub Repository Finder</h1>
       </header>
       <main>
-        <Repos />
+        <RepositoryWrapper />
       </main>
     </>
   )
