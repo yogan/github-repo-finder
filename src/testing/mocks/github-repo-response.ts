@@ -1,4 +1,4 @@
-export const response = {
+export const fakeRepoResponse = {
     "total_count": 1352817,
     "incomplete_results": false,
     "items": [

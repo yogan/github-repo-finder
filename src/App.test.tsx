@@ -3,7 +3,7 @@ import { expect, it } from 'vitest'
 import { render, screen, waitFor, waitForElementToBeRemoved, within } from './testing/utils'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import App from './App'
-import { response as mockedGitHubResponse } from './testing/mocks/github-repo-response'
+import { fakeRepoResponse } from './testing/mocks/github-repo-response'
 import { server } from './testing/mocks/server'
 import { GitHubApi } from './data/github'
 
@@ -35,7 +35,7 @@ it('Should load and render all mocked GitHub repositories', async () => {
     const { getAllByRole } = within(await screen.findByRole('list'))
     const repos = getAllByRole("listitem")
 
-    expect(repos.length).toBe(mockedGitHubResponse.items.length)
+    expect(repos.length).toBe(fakeRepoResponse.items.length)
 })
 
 it('Should show an error message when the API is failing', async () => {
