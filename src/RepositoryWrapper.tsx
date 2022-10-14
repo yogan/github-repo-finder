@@ -1,5 +1,5 @@
 import { useGitHubRepo } from './data/github'
-import { oneWeekAgo } from './dates'
+import { oneWeekAgo } from './utils/dates'
 import Repositories from './Repositories'
 
 type RepositoryWrapperProps = {

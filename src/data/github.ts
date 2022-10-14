@@ -1,6 +1,6 @@
 import fetch from 'cross-fetch'
 import { useQuery } from "@tanstack/react-query"
-import { YearMonthDayString } from '../dates'
+import { YearMonthDayString } from '../utils/dates'
 
 export const GitHubApi = {
     searchRepos: 'https://api.github.com/search/repositories'
