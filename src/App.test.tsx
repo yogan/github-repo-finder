@@ -1,6 +1,6 @@
 import { rest } from 'msw'
 import { beforeEach, expect, it } from 'vitest'
-import { render, screen, userEvent, waitFor, waitForElementToBeRemoved, within } from './testing/utils'
+import { render, screen, UserEvent, userEvent, waitFor, waitForElementToBeRemoved, within } from './testing/utils'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import App from './App'
 import { fakeRepoResponse } from './testing/mocks/github-repo-response'
@@ -57,6 +57,9 @@ it('Should have buttons on repo cards to mark and unmark favorites', async () =>
     await Promise.all(testAllRepos)
 })
 
+const clickOnFavoriteButton = async (user: UserEvent, card: HTMLElement) =>
+    await user.click(within(card).getByRole('button', { name: /favorite/i }))
+
 it('Should have a button to toggle between favorite and all repos', async () => {
     const user = userEvent.setup()
     render(createApp())
@@ -67,9 +70,9 @@ it('Should have a button to toggle between favorite and all repos', async () => 
     expect(repos.length).toBe(fakeRepoResponse.items.length)
 
     // mark three repositories as favorites
-    await user.click(within(repos[0]).getByRole('button'))
-    await user.click(within(repos[1]).getByRole('button'))
-    await user.click(within(repos[4]).getByRole('button'))
+    await clickOnFavoriteButton(user, repos[0])
+    await clickOnFavoriteButton(user, repos[1])
+    await clickOnFavoriteButton(user, repos[4])
 
     const toggleFavsOnlyButton =
         screen.getByRole('button', { name: 'Show only favorites' })
@@ -83,7 +86,7 @@ it('Should have a button to toggle between favorite and all repos', async () => 
     expect(filteredRepos.length).toBe(3) // only favorites visible
 
     // remove first repository from favorites
-    await user.click(within(filteredRepos[0]).getByRole('button'))
+    await clickOnFavoriteButton(user, filteredRepos[0])
 
     const remainingFilteredRepos = await findRepoCards()
     expect(remainingFilteredRepos.length).toBe(2)
