@@ -1,8 +1,13 @@
+import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import './App.css'
 import RepositoryWrapper from './RepositoryWrapper'
+import FavoritesFilterButton from './FavoritesFilterButton'
 
 function App() {
+  const [onlyFavorites, setOnlyFavorites] = useState(false)
+  const toggleOnlyFavorites = () => setOnlyFavorites(!onlyFavorites)
+
   return (
     <>
       <header>
@@ -15,7 +20,13 @@ function App() {
         <h1>GitHub Repository Finder</h1>
       </header>
       <main>
-        <RepositoryWrapper />
+        <FavoritesFilterButton
+          showOnlyFavorites={onlyFavorites}
+          toggleOnlyFavorites={toggleOnlyFavorites}
+        />
+        <RepositoryWrapper
+          showOnlyFavorites={onlyFavorites}
+        />
       </main>
     </>
   )

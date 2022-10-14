@@ -1,8 +1,8 @@
 .repo-container {
     display: grid;
-    height: 100vh;
     grid-gap: 1rem;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    margin-top: 1.5rem;
 }
 
 .repo-card {

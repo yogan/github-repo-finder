@@ -2,7 +2,11 @@ import { useGitHubRepo } from './data/github'
 import { oneWeekAgo } from './dates'
 import Repositories from './Repositories'
 
-function RepositoryWrapper() {
+type RepositoryWrapperProps = {
+    showOnlyFavorites: boolean
+}
+
+function RepositoryWrapper({ showOnlyFavorites }: RepositoryWrapperProps) {
     const repoQuery = useGitHubRepo(oneWeekAgo())
 
     if (repoQuery.isLoading) {
@@ -15,7 +19,12 @@ function RepositoryWrapper() {
         </span>
     }
 
-    return <Repositories repositories={repoQuery.data.items} />
+    return (
+        <Repositories
+            showOnlyFavorites={showOnlyFavorites}
+            repositories={repoQuery.data.items}
+        />
+    )
 }
 
 export default RepositoryWrapper
