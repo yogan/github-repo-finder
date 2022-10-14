@@ -1,24 +1,33 @@
 import './Repositories.css'
 import { Repository } from './data/github'
+import { useLocalStorage } from './hooks/LocalStorage'
+import RepositoryCard from './RepositoryCard'
 
-const Repositories = ({ repositories }: { repositories: Repository[] }) =>
-    <div className='repo-container'>
-        {repositories.map(repo => <Repo repo={repo} key={repo.name} />)}
-    </div>
+export type Favorites = number[]
 
-const Repo = ({ repo }: { repo: Repository }) =>
-    <div className='repo-card' data-testid='repository'>
-        <div>
+const Repositories = ({ repositories }: { repositories: Repository[] }) => {
+    const [favorites, setFavorites] = useLocalStorage<Favorites>('favorites', [])
 
-            <h2 title={repo.name}>
-                <a href={repo.html_url}>{repo.name}</a>
-            </h2>
-            <h3>⭐ {repo.stargazers_count}</h3>
-            <p>{repo.description}</p>
+    const toggleFavorite = (id: number) => {
+        if (favorites.includes(id)) {
+            setFavorites(favorites.filter(fav => fav !== id))
+        } else {
+            setFavorites([...favorites, id])
+        }
+    }
+
+    return (
+        <div className='repo-container'>
+            {repositories.map(repo =>
+                <RepositoryCard
+                    key={repo.name}
+                    repo={repo}
+                    favorites={favorites}
+                    toggleFavorite={toggleFavorite}
+                />)
+            }
         </div>
-        <div className='bottom'>
-            <button>❤️ Mark as favorite</button>
-        </div>
-    </div>
+    )
+}
 
 export default Repositories

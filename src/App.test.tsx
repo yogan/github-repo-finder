@@ -1,6 +1,6 @@
 import { rest } from 'msw'
 import { expect, it } from 'vitest'
-import { render, screen, waitFor, waitForElementToBeRemoved, within } from './testing/utils'
+import { render, screen, userEvent, waitFor, waitForElementToBeRemoved, within } from './testing/utils'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import App from './App'
 import { fakeRepoResponse } from './testing/mocks/github-repo-response'
@@ -36,17 +36,25 @@ it('Should load and render all mocked GitHub repositories', async () => {
     expect(repos.length).toBe(fakeRepoResponse.items.length)
 })
 
-it('Should show a "mark as favorite" button for each repository', async () => {
+it('Should have buttons on repo cards to mark and unmark favorites', async () => {
+    const user = userEvent.setup()
     render(createApp())
 
     await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
 
     const repos = await screen.findAllByTestId('repository')
 
-    repos.forEach(repo => {
+    const testAllRepos = repos.map(async (repo) => {
         const button = within(repo).getByRole('button')
         expect(button.textContent).toContain('Mark as favorite')
+
+        await user.click(button)
+
+        const buttonAfterClick = within(repo).getByRole('button')
+        expect(buttonAfterClick.textContent).toContain('Remove favorite')
     })
+
+    await Promise.all(testAllRepos)
 })
 
 it('Should show an error message when the API is failing', async () => {
