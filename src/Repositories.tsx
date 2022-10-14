@@ -8,11 +8,17 @@ const Repositories = ({ repositories }: { repositories: Repository[] }) =>
 
 const Repo = ({ repo }: { repo: Repository }) =>
     <div className='repo-card' data-testid='repository'>
-        <h2 title={repo.name}>
-            <a href={repo.html_url}>{repo.name}</a>
-        </h2>
-        <h3>⭐ {repo.stargazers_count}</h3>
-        <p>{repo.description}</p>
+        <div>
+
+            <h2 title={repo.name}>
+                <a href={repo.html_url}>{repo.name}</a>
+            </h2>
+            <h3>⭐ {repo.stargazers_count}</h3>
+            <p>{repo.description}</p>
+        </div>
+        <div className='bottom'>
+            <button>❤️ Mark as favorite</button>
+        </div>
     </div>
 
 export default Repositories
