@@ -1,11 +1,16 @@
-import { Repository } from "./data/github";
+import './Repositories.css'
+import { Repository } from './data/github'
 
 const Repositories = ({ repositories }: { repositories: Repository[] }) =>
-    <ul>
+    <div className='repo-container'>
         {repositories.map(repo => <Repo repo={repo} key={repo.name} />)}
-    </ul>
+    </div>
 
 const Repo = ({ repo }: { repo: Repository }) =>
-    <li>{repo.name} ({repo.stargazers_count} ⭐s)</li>
+    <div className='repo-card'>
+        <h2 title={repo.name}>{repo.name}</h2>
+        <h3>⭐ {repo.stargazers_count}</h3>
+        <p>{repo.description}</p>
+    </div>
 
 export default Repositories
