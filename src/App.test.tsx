@@ -50,8 +50,7 @@ it('Should have buttons on repo cards to mark and unmark favorites', async () =>
 
         await user.click(button)
 
-        const buttonAfterClick = within(repo).getByRole('button')
-        expect(buttonAfterClick.textContent).toContain('Remove favorite')
+        expect(button.textContent).toContain('Remove favorite')
     })
 
     await Promise.all(testAllRepos)
