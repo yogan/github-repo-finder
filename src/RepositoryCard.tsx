@@ -13,8 +13,10 @@ const RepositoryCard =
 
         const isFavorite = favorites.includes(repo.id)
 
+        const cardClass = isFavorite ? 'repo-card favorite' : 'repo-card'
+
         return (
-            <div className='repo-card' data-testid='repository'>
+            <div className={cardClass} data-testid='repository'>
                 <div>
                     <h2 title={repo.name}>
                         <a href={repo.html_url}>{repo.name}</a>

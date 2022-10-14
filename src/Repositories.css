@@ -17,6 +17,10 @@
     padding: 0.9rem;
 }
 
+.repo-card.favorite {
+    border: 2px solid #faca00;
+}
+
 .repo-card > .bottom {
     align-self: center;
 }
