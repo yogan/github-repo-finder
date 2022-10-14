@@ -19,7 +19,7 @@ const RepositoryCard =
             <div className={cardClass} data-testid='repository'>
                 <div>
                     <h2 title={repo.name}>
-                        <a href={repo.html_url}>{repo.name}</a>
+                        <a href={repo.html_url} target="_blank">{repo.name}</a>
                     </h2>
                     <h3>⭐ {repo.stargazers_count}</h3>
                     <p>{repo.description}</p>
