@@ -36,15 +36,6 @@ it('Should show a heading', () => {
     ).toBeDefined()
 })
 
-it('Should load and render all mocked GitHub repositories', async () => {
-    render(createApp())
-
-    await waitForElementToBeRemoved(queryLoadingIndicator)
-
-    const repos = await findRepoCards()
-    expect(repos.length).toBe(fakeRepoResponse.items.length)
-})
-
 it('Should have buttons on repo cards to mark and unmark favorites', async () => {
     const user = userEvent.setup()
     render(createApp())
