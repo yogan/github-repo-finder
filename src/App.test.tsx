@@ -1,6 +1,6 @@
 import { rest } from 'msw'
 import { expect, it } from 'vitest'
-import { render, screen, waitFor, waitForElementToBeRemoved, within } from './testing/utils'
+import { render, screen, waitFor, waitForElementToBeRemoved } from './testing/utils'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import App from './App'
 import { fakeRepoResponse } from './testing/mocks/github-repo-response'
@@ -32,9 +32,7 @@ it('Should load and render all mocked GitHub repositories', async () => {
 
     await waitForElementToBeRemoved(() => screen.queryByTestId('loading-indicator'))
 
-    const { getAllByRole } = within(await screen.findByRole('list'))
-    const repos = getAllByRole("listitem")
-
+    const repos = await screen.findAllByTestId('repository')
     expect(repos.length).toBe(fakeRepoResponse.items.length)
 })
 

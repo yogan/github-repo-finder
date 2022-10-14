@@ -7,7 +7,7 @@ const Repositories = ({ repositories }: { repositories: Repository[] }) =>
     </div>
 
 const Repo = ({ repo }: { repo: Repository }) =>
-    <div className='repo-card'>
+    <div className='repo-card' data-testid='repository'>
         <h2 title={repo.name}>
             <a href={repo.html_url}>{repo.name}</a>
         </h2>
