@@ -1,6 +1,6 @@
+import { Repository } from '../data/github'
+import { useLocalStorage } from '../hooks/LocalStorage'
 import './Repositories.css'
-import { Repository } from './data/github'
-import { useLocalStorage } from './hooks/LocalStorage'
 import RepositoryCard from './RepositoryCard'
 
 export type Favorites = number[]

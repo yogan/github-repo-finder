@@ -1,8 +1,9 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
-import RepositoryWrapper from './RepositoryWrapper'
+
+import reactLogo from '../assets/react.svg'
 import FavoritesFilterButton from './FavoritesFilterButton'
+import RepositoryWrapper from './RepositoryWrapper'
+import './App.css'
 
 function App() {
   const [onlyFavorites, setOnlyFavorites] = useState(false)

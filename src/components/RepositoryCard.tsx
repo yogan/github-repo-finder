@@ -1,4 +1,4 @@
-import { Repository } from './data/github'
+import { Repository } from '../data/github'
 import FavoriteButton from './FavoriteButton'
 import { Favorites } from './Repositories'
 
