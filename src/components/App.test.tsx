@@ -36,6 +36,44 @@ it('Should show a heading', () => {
     ).toBeDefined()
 })
 
+it('Should show repository cards with properties and the description', async () => {
+    const user = userEvent.setup()
+    render(createApp())
+
+    await waitForElementToBeRemoved(queryLoadingIndicator)
+
+    const repos = await findRepoCards()
+    expect(repos.length).toBe(fakeRepoResponse.items.length)
+
+    const testAllRepos = repos.map(async (repo) => {
+        const repoName = within(repo).getByRole('heading').textContent
+        const repoFromApi = fakeRepoResponse.items.find(repo => repo.name === repoName)
+
+        const stars = within(repo).getByTestId('repo-stars')
+        expect(stars.textContent).toContain(repoFromApi?.stargazers_count)
+
+        if (repoFromApi?.language) {
+            const language = within(repo).getByTestId('repo-language')
+            expect(language.textContent).toContain(repoFromApi.language)
+        } else {
+            // don't render the item if no language set
+            const language = within(repo).queryByTestId('repo-language')
+            expect(language).toBeNull()
+        }
+
+        if (repoFromApi?.description) {
+            const description = within(repo).getByTestId('repo-description')
+            expect(description.textContent).toBe(repoFromApi?.description)
+        } else {
+            // don't render the item if no description set
+            const description = within(repo).queryByTestId('repo-description')
+            expect(description).toBeNull()
+        }
+    })
+
+    await Promise.all(testAllRepos)
+})
+
 it('Should have buttons on repo cards to mark and unmark favorites', async () => {
     const user = userEvent.setup()
     render(createApp())

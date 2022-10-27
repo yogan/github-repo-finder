@@ -36,9 +36,12 @@
     font-weight: bold;
 }
 
-.repo-card h3 {
-    margin: 0.3rem;
-    font-size: medium;
+.repo-card .repo-props {
+    font-weight: bold;
+}
+
+.repo-card .repo-props span {
+    margin: 0.5rem;
 }
 
 .repo-card p {

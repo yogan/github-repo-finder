@@ -21,8 +21,21 @@ const RepositoryCard =
                     <h2 title={repo.full_name}>
                         <a href={repo.html_url} target="_blank">{repo.name}</a>
                     </h2>
-                    <h3>⭐ {repo.stargazers_count}</h3>
-                    <p>{repo.description}</p>
+                    <div className='repo-props'>
+                        <span data-testid='repo-stars'>
+                            ⭐ {repo.stargazers_count}
+                        </span>
+                        {repo.language &&
+                            <span data-testid='repo-language'>
+                                📃 {repo.language}
+                            </span>
+                        }
+                    </div>
+                    {repo.description &&
+                        <p data-testid='repo-description'>
+                            {repo.description}
+                        </p>
+                    }
                 </div>
                 <div className='bottom'>
                     <FavoriteButton
