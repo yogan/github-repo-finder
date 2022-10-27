@@ -25,7 +25,7 @@ const createApp = () => {
 // before each test case (which means starting w/o any marked favorites).
 beforeEach(() => window.localStorage.clear())
 
-const findRepoCards = async () => await screen.findAllByTestId('repository')
+const getRepoCards = () => screen.getAllByTestId('repository')
 
 const queryLoadingIndicator = () => screen.queryByTestId('loading-indicator')
 
@@ -38,15 +38,14 @@ it('Should show a heading', () => {
 })
 
 it('Should show repository cards with properties and the description', async () => {
-    const user = userEvent.setup()
     render(createApp())
 
     await waitForElementToBeRemoved(queryLoadingIndicator)
 
-    const repos = await findRepoCards()
+    const repos = getRepoCards()
     expect(repos.length).toBe(fakeRepoResponse.items.length)
 
-    const testAllRepos = repos.map(async (repo) => {
+    repos.forEach((repo) => {
         const repoName = within(repo).getByRole('heading').textContent
         const repoFromApi = fakeRepoResponse.items.find(repo => repo.name === repoName)
 
@@ -71,8 +70,6 @@ it('Should show repository cards with properties and the description', async () 
             expect(description).toBeNull()
         }
     })
-
-    await Promise.all(testAllRepos)
 })
 
 it('Should have buttons on repo cards to mark and unmark favorites', async () => {
@@ -81,7 +78,7 @@ it('Should have buttons on repo cards to mark and unmark favorites', async () =>
 
     await waitForElementToBeRemoved(queryLoadingIndicator)
 
-    const repos = await findRepoCards()
+    const repos = getRepoCards()
 
     const testAllRepos = repos.map(async (repo) => {
         const button = within(repo).getByRole('button')
@@ -117,13 +114,13 @@ it('Should only show repositories matching the selected language', async () => {
 
     await waitForElementToBeRemoved(queryLoadingIndicator)
 
-    const allRepos = await findRepoCards()
+    const allRepos = getRepoCards()
     expect(allRepos.length).toBe(numberOfAllRepos)
 
     // show only Python repos
     await user.selectOptions(dropdown, 'Python')
 
-    const pythonRepos = await findRepoCards()
+    const pythonRepos = getRepoCards()
     expect(pythonRepos.length).toBeLessThan(numberOfAllRepos)
 
     pythonRepos.forEach((repo) => {
@@ -134,7 +131,7 @@ it('Should only show repositories matching the selected language', async () => {
     // show only TypeScript repos
     await user.selectOptions(dropdown, 'TypeScript')
 
-    const tsRepos = await findRepoCards()
+    const tsRepos = getRepoCards()
     expect(tsRepos.length).toBeLessThan(numberOfAllRepos)
 
     tsRepos.forEach((repo) => {
@@ -145,7 +142,7 @@ it('Should only show repositories matching the selected language', async () => {
     // show all repos (any language) again
     await user.selectOptions(dropdown, screen.getByText(/Any language/))
 
-    const allReposAgain = await findRepoCards()
+    const allReposAgain = getRepoCards()
     expect(allReposAgain.length).toBe(numberOfAllRepos)
 })
 
@@ -158,7 +155,7 @@ it('Should have a button to toggle between favorite and all repos', async () => 
 
     await waitForElementToBeRemoved(queryLoadingIndicator)
 
-    const repos = await findRepoCards()
+    const repos = getRepoCards()
     expect(repos.length).toBe(fakeRepoResponse.items.length)
 
     // mark three repositories as favorites
@@ -174,13 +171,13 @@ it('Should have a button to toggle between favorite and all repos', async () => 
     // after being clicked, the button shall change its text
     expect(toggleFavsOnlyButton.textContent).toBe('Show all repositories')
 
-    const filteredRepos = await findRepoCards()
+    const filteredRepos = getRepoCards()
     expect(filteredRepos.length).toBe(3) // only favorites visible
 
     // remove first repository from favorites
     await clickOnFavoriteButton(user, filteredRepos[0])
 
-    const remainingFilteredRepos = await findRepoCards()
+    const remainingFilteredRepos = getRepoCards()
     expect(remainingFilteredRepos.length).toBe(2)
 
     await user.click(toggleFavsOnlyButton) // back to all repositories
@@ -188,7 +185,7 @@ it('Should have a button to toggle between favorite and all repos', async () => 
     // after being clicked, the button shall change its text back
     expect(toggleFavsOnlyButton.textContent).toBe('Show only favorites')
 
-    const allRepos = await findRepoCards()
+    const allRepos = getRepoCards()
     expect(allRepos.length).toBe(fakeRepoResponse.items.length) // all repos again
 })
 
