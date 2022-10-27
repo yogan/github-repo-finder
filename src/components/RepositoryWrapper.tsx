@@ -3,11 +3,12 @@ import { oneWeekAgo } from '../utils/dates'
 import Repositories from './Repositories'
 
 type RepositoryWrapperProps = {
+    language: string
     showOnlyFavorites: boolean
 }
 
-function RepositoryWrapper({ showOnlyFavorites }: RepositoryWrapperProps) {
-    const repoQuery = useGitHubRepo(oneWeekAgo())
+function RepositoryWrapper({ language, showOnlyFavorites }: RepositoryWrapperProps) {
+    const repoQuery = useGitHubRepo(oneWeekAgo(), language)
 
     if (repoQuery.isLoading) {
         return <span data-testid="loading-indicator">Loading…</span>

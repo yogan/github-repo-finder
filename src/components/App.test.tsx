@@ -5,6 +5,7 @@ import { render, screen, UserEvent, userEvent, waitFor, waitForElementToBeRemove
 import { fakeRepoResponse } from '../testing/mocks/github-repo-response'
 import { server } from '../testing/mocks/server'
 import { GitHubApi } from '../data/github'
+import { languageOptions } from './LanguageDropdown'
 import App from './App'
 
 const createApp = () => {
@@ -94,10 +95,64 @@ it('Should have buttons on repo cards to mark and unmark favorites', async () =>
     await Promise.all(testAllRepos)
 })
 
-const clickOnFavoriteButton = async (user: UserEvent, card: HTMLElement) =>
-    await user.click(within(card).getByRole('button', { name: /favorite/i }))
+it('Should have a dropdown to optionally filter for a language', async () => {
+    render(createApp())
+
+    const dropdown = screen.getByLabelText(/Language filter/)
+
+    const options = within(dropdown).getAllByRole('option')
+    expect(options.length).toBe(languageOptions.length)
+
+    const selectedOption = within(dropdown).getByRole('option',
+        { name: /Any language/ }) as HTMLOptionElement
+    expect(selectedOption.selected).toBe(true)
+})
+
+it('Should only show repositories matching the selected language', async () => {
+    const numberOfAllRepos = fakeRepoResponse.items.length
+    const user = userEvent.setup()
+    render(createApp())
+
+    const dropdown = screen.getByLabelText(/Language filter/)
+
+    await waitForElementToBeRemoved(queryLoadingIndicator)
+
+    const allRepos = await findRepoCards()
+    expect(allRepos.length).toBe(numberOfAllRepos)
+
+    // show only Python repos
+    await user.selectOptions(dropdown, 'Python')
+
+    const pythonRepos = await findRepoCards()
+    expect(pythonRepos.length).toBeLessThan(numberOfAllRepos)
+
+    pythonRepos.forEach((repo) => {
+        const language = within(repo).getByTestId('repo-language')
+        expect(language.textContent).toContain('Python')
+    })
+
+    // show only TypeScript repos
+    await user.selectOptions(dropdown, 'TypeScript')
+
+    const tsRepos = await findRepoCards()
+    expect(tsRepos.length).toBeLessThan(numberOfAllRepos)
+
+    tsRepos.forEach((repo) => {
+        const language = within(repo).getByTestId('repo-language')
+        expect(language.textContent).toContain('TypeScript')
+    })
+
+    // show all repos (any language) again
+    await user.selectOptions(dropdown, screen.getByText(/Any language/))
+
+    const allReposAgain = await findRepoCards()
+    expect(allReposAgain.length).toBe(numberOfAllRepos)
+})
 
 it('Should have a button to toggle between favorite and all repos', async () => {
+    const clickOnFavoriteButton = async (user: UserEvent, card: HTMLElement) =>
+        await user.click(within(card).getByRole('button', { name: /favorite/i }))
+
     const user = userEvent.setup()
     render(createApp())
 

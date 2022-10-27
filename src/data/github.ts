@@ -20,12 +20,17 @@ export type Repository = {
     stargazers_count: number
 }
 
-const buildUrl = (createdAfter: YearMonthDayString) =>
-    `${GitHubApi.searchRepos}?q=created:>${createdAfter}&sort=stars&order=desc`
+const buildQuery = (createdAfter: YearMonthDayString, language: string) =>
+    language === 'all'
+        ? `created:>${createdAfter}`
+        : `created:>${createdAfter}+language:${encodeURIComponent(language)}`
 
-export const useGitHubRepo = (createdAfter: YearMonthDayString) =>
-    useQuery<ApiResponse>(['repos', {date: createdAfter}], () =>
-        fetch(buildUrl(createdAfter))
+const buildUrl = (createdAfter: YearMonthDayString, language: string) =>
+    `${GitHubApi.searchRepos}?q=${buildQuery(createdAfter, language)}&sort=stars&order=desc`
+
+export const useGitHubRepo = (createdAfter: YearMonthDayString, language: string) =>
+    useQuery<ApiResponse>(['repos', language, {date: createdAfter}], () =>
+        fetch(buildUrl(createdAfter, language))
             .then(res => {
                 if (!res.ok) {
                     throw new Error(`HTTP error (status ${res.status})`)

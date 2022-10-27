@@ -51,3 +51,13 @@ header h1 {
     animation: logo-spin infinite 20s linear;
   }
 }
+
+.toolbar > * {
+  margin-inline-start: 1rem;
+  margin-inline-end: 1rem;
+}
+
+.toolbar > span > * {
+  margin-inline-start: 0.4rem;
+  margin-inline-end: 0.4rem;
+}

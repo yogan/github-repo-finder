@@ -1,5 +1,6 @@
 import { useState } from 'react'
 
+import LanguageDropdown, { LanguageDropdownProps } from './LanguageDropdown'
 import FavoritesFilterButton from './FavoritesFilterButton'
 import RepositoryWrapper from './RepositoryWrapper'
 import './App.css'
@@ -7,6 +8,11 @@ import './App.css'
 function App() {
   const [onlyFavorites, setOnlyFavorites] = useState(false)
   const toggleOnlyFavorites = () => setOnlyFavorites(!onlyFavorites)
+
+  const [language, setLanguage] = useState('all')
+
+  const onLanguageChange: LanguageDropdownProps['onChange']
+    = (event) => setLanguage(event.target.value)
 
   return (
     <>
@@ -20,11 +26,17 @@ function App() {
         </a>
       </header>
       <main>
-        <FavoritesFilterButton
-          showOnlyFavorites={onlyFavorites}
-          toggleOnlyFavorites={toggleOnlyFavorites}
-        />
+        <div className='toolbar'>
+          <LanguageDropdown
+            onChange={onLanguageChange}
+          />
+          <FavoritesFilterButton
+            showOnlyFavorites={onlyFavorites}
+            toggleOnlyFavorites={toggleOnlyFavorites}
+          />
+        </div>
         <RepositoryWrapper
+          language={language}
           showOnlyFavorites={onlyFavorites}
         />
       </main>
