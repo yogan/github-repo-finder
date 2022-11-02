@@ -20,6 +20,9 @@ export type Repository = {
     stargazers_count: number
 }
 
+const buildQueryKey = (date: YearMonthDayString, language: string) =>
+    ['repos', language, date ]
+
 const buildQuery = (createdAfter: YearMonthDayString, language: string) =>
     language === 'all'
         ? `created:>${createdAfter}`
@@ -32,7 +35,7 @@ export const useGitHubRepo = (createdAfter: YearMonthDayString, language: string
     const queryClient = useQueryClient()
 
     return useQuery<ApiResponse>(
-        ['repos', language, { date: createdAfter }],
+        buildQueryKey(createdAfter, language),
         () => fetch(buildUrl(createdAfter, language))
             .then(res => {
                 if (!res.ok) {
@@ -49,7 +52,7 @@ export const useGitHubRepo = (createdAfter: YearMonthDayString, language: string
                 // requests returns data.
 
                 const allRepos = queryClient.getQueryData<ApiResponse>(
-                    ['repos', 'all', { date: createdAfter }])
+                    buildQueryKey(createdAfter, 'all'))
 
                 if (allRepos === undefined) {
                     // There was nothing in the cache, so we'll have to wait
