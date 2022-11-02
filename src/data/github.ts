@@ -48,6 +48,12 @@ const tryGetFilteredReposFromCache =
         // replaced with the full backend result once the GitHub API
         // requests returns data.
 
+        if (language === 'all') {
+            // Client-side filtering only makes sense when a specific language
+            // is chosen.
+            return undefined
+        }
+
         const allRepos = queryClient.getQueryData<ApiResponse>(
             buildQueryKey(createdAfter, 'all'))
 
