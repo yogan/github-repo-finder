@@ -27,6 +27,9 @@ beforeEach(() => window.localStorage.clear())
 
 const findRepoCards = async () => screen.findAllByTestId('repository')
 
+const clickOnFavoriteButton = async (user: UserEvent, card: HTMLElement) =>
+    await user.click(within(card).getByRole('button', { name: /favorite/i }))
+
 it('Should show a heading', () => {
     render(createApp())
 
@@ -139,9 +142,6 @@ it('Should only show repositories matching the selected language', async () => {
 })
 
 it('Should have a button to toggle between favorite and all repos', async () => {
-    const clickOnFavoriteButton = async (user: UserEvent, card: HTMLElement) =>
-        await user.click(within(card).getByRole('button', { name: /favorite/i }))
-
     const user = userEvent.setup()
     render(createApp())
 
@@ -179,6 +179,28 @@ it('Should have a button to toggle between favorite and all repos', async () => 
 
     const allRepos = await findRepoCards()
     expect(allRepos.length).toBe(fakeRepoResponse.items.length) // all repos again
+})
+
+it('Should only enable the "only favorites" button when there are favorites', async () => {
+    const user = userEvent.setup()
+    render(createApp())
+
+    const toggleFavsOnlyButton = screen.getByRole<HTMLButtonElement>(
+        'button', { name: /Show only favorites/ })
+
+    expect(toggleFavsOnlyButton.disabled).toBe(true)
+    expect(toggleFavsOnlyButton.title).toBe('Set some favorites first')
+
+    const repos = await findRepoCards()
+    await clickOnFavoriteButton(user, repos[0])
+
+    expect(toggleFavsOnlyButton.disabled).toBe(false)
+    expect(toggleFavsOnlyButton.title).toBe('')
+
+    await clickOnFavoriteButton(user, repos[0])
+
+    expect(toggleFavsOnlyButton.disabled).toBe(true)
+    expect(toggleFavsOnlyButton.title).toBe('Set some favorites first')
 })
 
 it('Should show an error message when the API is failing', async () => {

@@ -8,7 +8,14 @@ type FavoritesFilterButtonProps = {
 
 const FavoritesFilterButton =
     ({ showOnlyFavorites, favorites, toggleOnlyFavorites }: FavoritesFilterButtonProps) =>
-        <button onClick={() => toggleOnlyFavorites()}>
+        <button
+            onClick={() => toggleOnlyFavorites()}
+            disabled={favorites.length === 0}
+            title={favorites.length === 0
+                ? 'Set some favorites first'
+                : ''
+            }
+        >
             {showOnlyFavorites
                 ? 'Show all repositories'
                 : `Show only favorites (${favorites.length})`}
