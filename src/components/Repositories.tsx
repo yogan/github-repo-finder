@@ -30,7 +30,7 @@ const Repositories =
             <div className='repo-container'>
                 {filteredRepositories.map(repo =>
                     <RepositoryCard
-                        key={repo.name}
+                        key={repo.id}
                         repo={repo}
                         favorites={favorites}
                         toggleFavorite={toggleFavorite}
