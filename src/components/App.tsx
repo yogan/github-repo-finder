@@ -2,10 +2,22 @@ import { useState } from 'react'
 
 import LanguageDropdown, { LanguageDropdownProps } from './LanguageDropdown'
 import FavoritesFilterButton from './FavoritesFilterButton'
+import { Favorites } from './Repositories'
 import RepositoryWrapper from './RepositoryWrapper'
+import { useLocalStorage } from '../hooks/LocalStorage'
 import './App.css'
 
 function App() {
+    const [favorites, setFavorites] = useLocalStorage<Favorites>('favorites', [])
+
+    const toggleFavorite = (id: number) => {
+        if (favorites.includes(id)) {
+            setFavorites(favorites.filter(fav => fav !== id))
+        } else {
+            setFavorites([...favorites, id])
+        }
+    }
+
     const [onlyFavorites, setOnlyFavorites] = useState(false)
     const toggleOnlyFavorites = () => setOnlyFavorites(!onlyFavorites)
 
@@ -32,12 +44,15 @@ function App() {
                     />
                     <FavoritesFilterButton
                         showOnlyFavorites={onlyFavorites}
+                        favorites={favorites}
                         toggleOnlyFavorites={toggleOnlyFavorites}
                     />
                 </div>
                 <RepositoryWrapper
                     language={language}
                     showOnlyFavorites={onlyFavorites}
+                    favorites={favorites}
+                    toggleFavorite={toggleFavorite}
                 />
             </main>
         </>

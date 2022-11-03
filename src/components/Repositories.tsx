@@ -1,27 +1,18 @@
 import { Repository } from '../data/github'
-import { useLocalStorage } from '../hooks/LocalStorage'
-import './Repositories.css'
 import RepositoryCard from './RepositoryCard'
+import './Repositories.css'
 
 export type Favorites = number[]
 
 type RepositoriesProps = {
     showOnlyFavorites: boolean
+    favorites: Repository['id'][]
+    toggleFavorite: (id: Repository['id']) => void
     repositories: Repository[]
 }
 
 const Repositories =
-    ({ showOnlyFavorites, repositories }: RepositoriesProps) => {
-        const [favorites, setFavorites] = useLocalStorage<Favorites>('favorites', [])
-
-        const toggleFavorite = (id: number) => {
-            if (favorites.includes(id)) {
-                setFavorites(favorites.filter(fav => fav !== id))
-            } else {
-                setFavorites([...favorites, id])
-            }
-        }
-
+    ({ showOnlyFavorites, favorites, toggleFavorite, repositories }: RepositoriesProps) => {
         const filteredRepositories = showOnlyFavorites
             ? repositories.filter(repo => favorites.includes(repo.id))
             : repositories

@@ -1,13 +1,15 @@
-import { useGitHubRepo } from '../data/github'
+import { Repository, useGitHubRepo } from '../data/github'
 import { oneWeekAgo } from '../utils/dates'
 import Repositories from './Repositories'
 
 type RepositoryWrapperProps = {
     language: string
     showOnlyFavorites: boolean
+    favorites: Repository['id'][]
+    toggleFavorite: (id: Repository['id']) => void
 }
 
-function RepositoryWrapper({ language, showOnlyFavorites }: RepositoryWrapperProps) {
+function RepositoryWrapper({ language, showOnlyFavorites, favorites, toggleFavorite }: RepositoryWrapperProps) {
     const repoQuery = useGitHubRepo(oneWeekAgo(), language)
 
     if (repoQuery.isLoading) {
@@ -23,6 +25,8 @@ function RepositoryWrapper({ language, showOnlyFavorites }: RepositoryWrapperPro
     return (
         <Repositories
             showOnlyFavorites={showOnlyFavorites}
+            favorites={favorites}
+            toggleFavorite={toggleFavorite}
             repositories={repoQuery.data.items}
         />
     )

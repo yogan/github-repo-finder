@@ -154,7 +154,8 @@ it('Should have a button to toggle between favorite and all repos', async () => 
     await clickOnFavoriteButton(user, repos[4])
 
     const toggleFavsOnlyButton =
-        screen.getByRole('button', { name: 'Show only favorites' })
+        screen.getByRole('button', { name: /Show only favorites/ })
+    expect(toggleFavsOnlyButton.textContent).toBe('Show only favorites (3)')
 
     await user.click(toggleFavsOnlyButton)
 
@@ -172,8 +173,9 @@ it('Should have a button to toggle between favorite and all repos', async () => 
 
     await user.click(toggleFavsOnlyButton) // back to all repositories
 
-    // after being clicked, the button shall change its text back
-    expect(toggleFavsOnlyButton.textContent).toBe('Show only favorites')
+    // after being clicked, the button shall change its text back, including the
+    // updated number of favorites
+    expect(toggleFavsOnlyButton.textContent).toBe('Show only favorites (2)')
 
     const allRepos = await findRepoCards()
     expect(allRepos.length).toBe(fakeRepoResponse.items.length) // all repos again
