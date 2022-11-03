@@ -1,7 +1,7 @@
 import { rest } from 'msw'
 import { beforeEach, expect, it } from 'vitest'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { render, screen, UserEvent, userEvent, waitFor, waitForElementToBeRemoved, within } from '../testing/utils'
+import { render, screen, UserEvent, userEvent, waitFor, within } from '../testing/utils'
 import { fakeRepoResponse } from '../testing/mocks/github-repo-response'
 import { server } from '../testing/mocks/server'
 import { GitHubApi } from '../data/github'
